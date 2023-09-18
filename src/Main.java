@@ -23,8 +23,8 @@ public class Main {
             );
         }
 
-        Stream less18 = persons.stream().filter(age -> age.getAge() < 18);
-        System.out.println("Количество несовершеннолетних = " + less18.count());
+        int count = (int) persons.stream().filter(age -> age.getAge() < 18).count();
+        System.out.println("Количество несовершеннолетних = " + count);
 
         Predicate<Person> men = sex -> sex.getSex() == Sex.MAN;
         Predicate<Person> women = sex -> sex.getSex() == Sex.WOMAN;
@@ -32,7 +32,7 @@ public class Main {
         List<String> combatants = persons.stream()
                 .filter(men)
                 .filter(age -> age.getAge() >= 18 && age.getAge() <= 27)
-                .map(Person::toString)
+                .map(Person::getFamily)
                 .toList();
         System.out.println();
 
@@ -44,11 +44,10 @@ public class Main {
         Predicate<Person> workableMen = age -> age.getAge() >= 18 && age.getAge() <= 65;
         Predicate<Person> workableWomen = age -> age.getAge() >= 18 && age.getAge() <= 60;
 
-        List<String> workable = persons.stream()
+        List<Person> workable = persons.stream()
                 .filter(education -> education.getEducation() == Education.HIGHER)
                 .filter(men.and(workableMen).or(women.and(workableWomen)))
                 .sorted(Comparator.comparing(Person::getFamily))
-                .map(Person::toString)
                 .toList();
 
         System.out.println("Количество трудоспособных = ");
